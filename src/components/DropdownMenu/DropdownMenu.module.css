@@ -1,0 +1,11 @@
+.dropdown {
+  color: var(--secondary-color);
+  background: var(--gray);
+  font-size: 16px;
+  border-radius: 7px;
+  width: 260px;
+  height: 45px;
+  border: none;
+  padding: 10px 15px;
+  text-align: center;
+}
