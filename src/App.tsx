@@ -5,7 +5,6 @@ import { Sidebar } from "./components/Sidebar/Sidebar";
 import { ProductList } from "./components/ProductList/ProductList";
 
 function App() {
-  // Не забудь про Main
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
 
   const toggleSidebar = () => {
