@@ -1,5 +1,5 @@
-import { ProductCard } from "../Card/ProductCard";
-import { ProductCardProps } from "../Card/ProductCard.props";
+import { ProductCard } from "../ProductCard/ProductCard";
+import { ProductCardProps } from "../ProductCard/ProductCard.props";
 import styles from "./ProductList.module.css";
 
 type Product = ProductCardProps & { id: string };

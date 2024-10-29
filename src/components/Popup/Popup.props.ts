@@ -1,4 +1,4 @@
-import { ProductCardProps } from "../Card/ProductCard.props";
+import { ProductCardProps } from "../ProductCard/ProductCard.props";
 
 export interface PopupProps {
   isOpen: boolean;
