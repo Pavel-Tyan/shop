@@ -1,11 +1,13 @@
 import { ProductCard } from "../ProductCard/ProductCard";
 import { ProductCardProps } from "../ProductCard/ProductCard.props";
 import styles from "./ProductList.module.css";
+import { ProductListProps } from "./ProductList.props";
+import { CARDS_PER_PAGE } from "../../App";
 
 type Product = ProductCardProps & { id: string };
 
 //Замокаем данные о продуктах, которые нужно брать с бэкенда
-const products: Product[] = [
+export const products: Product[] = [
   {
     id: "1",
     name: "Молоко",
@@ -60,12 +62,49 @@ const products: Product[] = [
     count: 50,
     measure: "шт",
   },
+  {
+    id: "7",
+    name: "Альбом",
+    description: "Альбом 24 листа",
+    category: "Канцелярия",
+    count: 50,
+    measure: "шт",
+  },
+  {
+    id: "8",
+    name: "Альбом",
+    description: "Альбом 24 листа",
+    category: "Канцелярия",
+    count: 50,
+    measure: "шт",
+  },
+  {
+    id: "9",
+    name: "Альбом",
+    description: "Альбом 24 листа",
+    category: "Канцелярия",
+    count: 50,
+    measure: "шт",
+  },
+  {
+    id: "10",
+    name: "Альбом",
+    description: "Альбом 24 листа",
+    category: "Канцелярия",
+    count: 50,
+    measure: "шт",
+  },
 ];
 
-export const ProductList = () => {
+export const ProductList = ({ currentPage }: ProductListProps) => {
+  const currentProducts = products.slice(
+    (currentPage - 1) * CARDS_PER_PAGE,
+    currentPage * CARDS_PER_PAGE
+  );
+
   return (
     <div className={styles["wrapper"]}>
-      {products.map((product: Product) => (
+      {currentProducts.map((product: Product) => (
         <ProductCard key={product.id} {...product} />
       ))}
     </div>

@@ -1,3 +1,3 @@
 export interface NavbarProps {
-  toggleSidebar: () => void;
+  toggleDrawer: () => void;
 }

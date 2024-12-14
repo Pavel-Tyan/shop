@@ -1,9 +1,8 @@
 import { DropdownMenu } from "../DropdownMenu/DropdownMenu";
 import styles from "./Sidebar.module.css";
-import { SidebarProps } from "./Sidebar.props";
 
-export const Sidebar = ({ isOpen }: SidebarProps) => {
-  const style = isOpen ? "sidebar" : "hidden";
+export const Sidebar = () => {
+  const style = "sidebar";
 
   return (
     <aside className={styles[style]}>
