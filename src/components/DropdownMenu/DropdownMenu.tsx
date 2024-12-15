@@ -1,12 +1,23 @@
+import { useContext } from "react";
 import { MUIStyles } from "../../@types";
-import { DropdownMenuProps } from "./DropdownMenu.props";
-import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import {
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Button,
+} from "@mui/material";
+import { ProductsContext, Context } from "../ProductsProvider/ProductsProvider";
 
-export const DropdownMenu = ({
-  currentOptions,
-  options,
-  addOption,
-}: DropdownMenuProps) => {
+export const DropdownMenu = () => {
+  const context = useContext<ProductsContext>(Context);
+
+  const addCategory = context ? context.addToCurrentCategories : () => {};
+  const removeCurrentCategories = context
+    ? context.removeCurrentCategories
+    : () => {};
+  const categories = context ? context.categories : [];
+
   const formStyles: MUIStyles = {
     width: "200px",
     background: "var(--gray)",
@@ -18,19 +29,20 @@ export const DropdownMenu = ({
   return (
     <FormControl fullWidth sx={formStyles}>
       <InputLabel id="category-select-label" sx={inputStyles}>
-        Категория
+        Добавить фильтр
       </InputLabel>
       <Select
         labelId="category-select-label"
         id="category-select"
-        value={currentOptions[0]}
-        onChange={addOption}
         label="Категория"
       >
-        {options.map((item) => (
-          <MenuItem key={item}>{item}</MenuItem>
+        {categories.map((item) => (
+          <MenuItem onClick={() => addCategory(item)} key={item}>
+            {item}
+          </MenuItem>
         ))}
       </Select>
+      <Button onClick={removeCurrentCategories}>Сбросить фильтры</Button>
     </FormControl>
   );
 };

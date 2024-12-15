@@ -1,6 +1,13 @@
 import SearchIcon from "@mui/icons-material/Search";
-// import { DropdownMenu } from "../DropdownMenu/DropdownMenu";
-import { Box, Button, Input, InputLabel, Typography } from "@mui/material";
+import { DropdownMenu } from "../DropdownMenu/DropdownMenu";
+import {
+  Box,
+  Button,
+  Card,
+  Input,
+  InputLabel,
+  Typography,
+} from "@mui/material";
 import { MUIStyles } from "../../@types";
 import { useContext, useState } from "react";
 import { Context, ProductsContext } from "../ProductsProvider/ProductsProvider";
@@ -8,6 +15,8 @@ import { SidebarProps } from "./Sidebar.props";
 
 export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
   const context = useContext<ProductsContext>(Context);
+
+  const currentCategories = context ? context.currentCategories : [];
 
   const searchProducts = context ? context.searchProducts : () => {};
 
@@ -68,6 +77,15 @@ export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
     color: "var(--secondary-color)",
   };
 
+  const categoryCardStyles: MUIStyles = {
+    width: "50%",
+    height: "35px",
+    background: "var(--blue)",
+    color: "var(--secondary-color)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
   return (
     <Box sx={sidebarWrapperStyles}>
       <Box sx={textInputWrapper}>
@@ -88,7 +106,12 @@ export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
         <Input sx={checkboxStyles} type="checkbox" />
         <Typography color="inherited">Не пустой склад</Typography>
       </InputLabel>
-      {/* <DropdownMenu /> */}
+      <DropdownMenu />
+      {currentCategories.map((item) => (
+        <Card sx={categoryCardStyles} key={item}>
+          {item}
+        </Card>
+      ))}
     </Box>
   );
 };

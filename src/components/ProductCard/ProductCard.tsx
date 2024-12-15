@@ -31,6 +31,7 @@ export const ProductCard = (props: ProductCardProps) => {
     height: "285px",
     color: "var(--secondary-color)",
     transition: "background 0.6s, width 0.6s, height 0.6s",
+    cursor: "pointer",
   };
 
   const cardImageStyles: MUIStyles = {

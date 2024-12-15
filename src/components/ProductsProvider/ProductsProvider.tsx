@@ -9,6 +9,7 @@ export type ProductsContext = {
   filteredProducts: Product[];
   addToCurrentCategories: (category: string) => void;
   searchProducts: (searchValue: string) => void;
+  removeCurrentCategories: () => void;
 } | null;
 // Замокаем данные, которые по хорошему идут с бекенда.
 const products: Product[] = [
@@ -136,6 +137,10 @@ export const ProductsProvider = ({ children }: ProductsProviderProps) => {
     },
     searchProducts: (searchValue: string) => {
       setFilteredProducts(searchProducts(categories, searchValue));
+    },
+
+    removeCurrentCategories: () => {
+      setCurrentCategories([]);
     },
   };
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;
