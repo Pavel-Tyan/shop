@@ -1,3 +1,3 @@
 export interface SidebarProps {
-  isOpen: boolean;
+  toggleDrawer: () => void;
 }

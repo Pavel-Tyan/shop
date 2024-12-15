@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ProductCardProps } from "./ProductCard.props";
 import { CardDialog } from "../CardDialog/CardDialog";
 import { Box, Card, CardMedia, Divider, Typography } from "@mui/material";
+import { MUIStyles } from "../../@types";
 
 export const ProductCard = (props: ProductCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -10,9 +11,7 @@ export const ProductCard = (props: ProductCardProps) => {
     setIsDialogOpen(!isDialogOpen);
   };
 
-  const { name, description, img } = props;
-
-  const cardStyles = {
+  const cardStyles: MUIStyles = {
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
@@ -26,7 +25,7 @@ export const ProductCard = (props: ProductCardProps) => {
     transition: "background 0.6s, width 0.6s, height 0.6s",
   };
 
-  const cardHoverStyles = {
+  const cardHoverStyles: MUIStyles = {
     background: "var(--blue)",
     width: "245px",
     height: "285px",
@@ -34,7 +33,7 @@ export const ProductCard = (props: ProductCardProps) => {
     transition: "background 0.6s, width 0.6s, height 0.6s",
   };
 
-  const cardImageStyles = {
+  const cardImageStyles: MUIStyles = {
     marginTop: "10px",
     height: "160px",
     width: "90%",
@@ -42,7 +41,7 @@ export const ProductCard = (props: ProductCardProps) => {
     borderRadius: "7px",
   };
 
-  const cardContentStyles = {
+  const cardContentStyles: MUIStyles = {
     width: "100%",
     display: "flex",
     flexDirection: "column",
@@ -50,12 +49,13 @@ export const ProductCard = (props: ProductCardProps) => {
     paddingRight: "10px",
   };
 
-  const cardTitleStyles = {
+  const cardTitleStyles: MUIStyles = {
+    marginBottom: "10px",
     fontSize: "18px",
     fontWeight: 800,
   };
 
-  const cardTextStyles = {
+  const cardTextStyles: MUIStyles = {
     width: "100%",
     textAlign: "left",
     textOverflow: "ellipsis",
@@ -64,10 +64,12 @@ export const ProductCard = (props: ProductCardProps) => {
     textWrap: "balance",
   };
 
-  const dividerStyles = {
+  const dividerStyles: MUIStyles = {
     width: "100%",
     background: "var(--secondary-color)",
   };
+
+  const { name, description, img } = props;
 
   return (
     <>
@@ -92,7 +94,9 @@ export const ProductCard = (props: ProductCardProps) => {
           />
         )}
         <Box sx={cardContentStyles}>
-          <Typography sx={cardTitleStyles}>{name}</Typography>
+          <Typography variant="h1" sx={cardTitleStyles}>
+            {name}
+          </Typography>
           <Divider sx={dividerStyles} />
           <Typography sx={cardTextStyles}>{description}</Typography>
         </Box>

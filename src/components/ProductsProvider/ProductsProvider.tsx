@@ -1,13 +1,15 @@
-import { useState } from "react";
-import { Header } from "./components/Header/Header";
-import { Sidebar } from "./components/Sidebar/Sidebar";
-import { Product, ProductList } from "./components/ProductList/ProductList";
-import { Box, Drawer, Pagination } from "@mui/material";
-import { MUIStyles } from "./@types";
-import { ProductsProvider } from "./components/ProductsProvider/ProductsProvider";
+import { createContext, useState } from "react";
+import { Product } from "../ProductList/ProductList";
+import { ProductsProviderProps } from "./ProductsProvider.props";
 
-export const CARDS_PER_PAGE = 8;
-
+export type ProductsContext = {
+  products: Product[];
+  categories: string[];
+  currentCategories: string[];
+  filteredProducts: Product[];
+  addToCurrentCategories: (category: string) => void;
+  searchProducts: (searchValue: string) => void;
+} | null;
 // Замокаем данные, которые по хорошему идут с бекенда.
 const products: Product[] = [
   {
@@ -97,82 +99,44 @@ const products: Product[] = [
     measure: "шт",
   },
 ];
+const categories: string[] = ["Еда", "Канцелярия"];
 
-function App() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
-  const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen);
+export const Context = createContext<ProductsContext>(null);
+
+export const ProductsProvider = ({ children }: ProductsProviderProps) => {
+  const [currentCategories, setCurrentCategories] = useState<string[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
+
+  const searchProducts = (categories: string[], searchValue: string) => {
+    console.log(categories);
+    console.log(searchValue);
+    return products.filter((product) => {
+      // Проверяем, что продукт содержит все выбранные категории
+      for (const category of currentCategories) {
+        if (!product.category?.includes(category)) {
+          return false;
+        }
+      }
+      // Проверяем на соответствие значения в поле поиска
+      console.log(
+        product.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      return product.name.toLowerCase().includes(searchValue.toLowerCase());
+    });
   };
 
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
-  const changeCurrentPage = (
-    _event: React.ChangeEvent<unknown>,
-    page: number
-  ): void => {
-    setCurrentPage(page);
-  };
-
-  const pageCount = Math.ceil(products.length / CARDS_PER_PAGE);
-
-  const containerStyles: MUIStyles = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
-    height: "100svh",
-    position: "relative",
-  };
-
-  const paginationWrapperStyles: MUIStyles = {
-    display: "flex",
-    justifyContent: "center",
-    padding: "20px",
-  };
-
-  const paginationStyles: MUIStyles = {
-    margin: "15px",
-  };
-
-  const paginationItemStyles: MUIStyles = {
-    "& .MuiPaginationItem-root": {
-      color: "var(--secondary-color)",
-      transition: "background 0.6s",
+  const contextValue = {
+    products: products,
+    categories: categories,
+    currentCategories: currentCategories,
+    filteredProducts: filteredProducts,
+    addToCurrentCategories: (category: string) => {
+      // Set используется, чтобы удалить дубликаты категорий
+      setCurrentCategories([...new Set([...currentCategories, category])]);
+    },
+    searchProducts: (searchValue: string) => {
+      setFilteredProducts(searchProducts(categories, searchValue));
     },
   };
-
-  const paginationItemHoverStyles: MUIStyles = {
-    "& .MuiPaginationItem-root:hover": {
-      background: "var(--blue)",
-      transition: "background 0.6s",
-    },
-  };
-
-  return (
-    <Box sx={containerStyles}>
-      <Header toggleDrawer={toggleDrawer} />
-      <ProductsProvider>
-        <Drawer open={isDrawerOpen} onClose={toggleDrawer}>
-          {<Sidebar toggleDrawer={toggleDrawer} />}
-        </Drawer>
-        <ProductList currentPage={currentPage} />
-      </ProductsProvider>
-      <Box sx={paginationWrapperStyles}>
-        <Pagination
-          count={pageCount}
-          page={currentPage}
-          onChange={changeCurrentPage}
-          variant="outlined"
-          sx={[
-            paginationStyles,
-            paginationItemStyles,
-            paginationItemHoverStyles,
-          ]}
-        />
-      </Box>
-    </Box>
-  );
-}
-
-export default App;
+  return <Context.Provider value={contextValue}>{children}</Context.Provider>;
+};

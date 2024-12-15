@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { CardDialogProps } from "./CardDialog.props";
 import CloseIcon from "@mui/icons-material/Close";
+import { MUIStyles } from "../../@types";
 
 export const CardDialog = ({
   isOpen,
@@ -18,7 +19,7 @@ export const CardDialog = ({
 }: CardDialogProps) => {
   const { name, description, category, count, measure, img } = productInfo;
 
-  const dialogContentStyles = {
+  const dialogContentStyles: MUIStyles = {
     width: "600px",
     display: "flex",
     flexDirection: "column",
@@ -26,14 +27,14 @@ export const CardDialog = ({
     background: "var(--gray)",
   };
 
-  const dialogImageStyles = {
+  const dialogImageStyles: MUIStyles = {
     width: "100%",
     height: "350px",
     objectFit: "cover",
     borderRadius: "7px",
   };
 
-  const closeButtonStyles = {
+  const closeButtonStyles: MUIStyles = {
     position: "absolute",
     right: "8%",
     top: "5.5%",
@@ -42,33 +43,37 @@ export const CardDialog = ({
     transition: "background 0.6s",
   };
 
-  const closeButtonHoverStyles = {
+  const closeButtonHoverStyles: MUIStyles = {
     background: "var(--blue)",
     transition: "background 0.6s",
   };
 
-  const cardTitleStyles = {
+  const cardTitleStyles: MUIStyles = {
     fontSize: "19px",
     fontWeight: 800,
     color: "var(--secondary-color)",
   };
 
-  const cardTextStyles = {
+  const cardTextStyles: MUIStyles = {
     maxHeight: "185px",
     overflow: "hidden",
     textOverflow: "ellipsis",
     color: "var(--secondary-color)",
   };
 
-  const dividerStyles = {
+  const dividerStyles: MUIStyles = {
     width: "100%",
     background: "var(--secondary-color)",
   };
 
-  const dialogContentTextStyles = {
+  const dialogContentTextStyles: MUIStyles = {
     display: "flex",
     flexDirection: "column",
     gap: "20px",
+  };
+
+  const dialogActionsStyles: MUIStyles = {
+    background: "var(--gray)",
   };
 
   return (
@@ -113,7 +118,7 @@ export const CardDialog = ({
           </Typography>
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={dialogActionsStyles}>
         <Button
           sx={[closeButtonStyles, { "&:hover": closeButtonHoverStyles }]}
           onClick={closeDialog}
