@@ -1,8 +1,12 @@
 import { AppBar, Toolbar, MenuItem, MenuList, Button } from "@mui/material";
-import { HeaderProps } from "./Header.props";
-import { MUIStyles } from "../../@types";
+import { HeaderProps } from "@components/Header/Header.props";
+import { MUIStyles } from "@/@types";
+import { Link } from "react-router";
 
-export const Header = ({ toggleDrawer }: HeaderProps) => {
+export const Header = ({
+  hasDrawer: hasSidebar,
+  toggleDrawer,
+}: HeaderProps) => {
   const appBarStyles: MUIStyles = {
     bgcolor: "var(--primary-color)",
     opacity: 0.8,
@@ -23,15 +27,17 @@ export const Header = ({ toggleDrawer }: HeaderProps) => {
       <Toolbar sx={toolbarStyles}>
         <nav>
           <MenuList sx={menuListStyles}>
-            <Button
-              color="inherit"
-              onClick={toggleDrawer}
-              sx={[menuItemsStyles, menuItemsHoverStyles]}
-            >
-              Боковое меню
-            </Button>
+            {hasSidebar && (
+              <Button
+                color="inherit"
+                onClick={toggleDrawer}
+                sx={[menuItemsStyles, menuItemsHoverStyles]}
+              >
+                Боковое меню
+              </Button>
+            )}
             <MenuItem sx={[menuItemsStyles, menuItemsHoverStyles]}>
-              Продукты
+              <Link to="/">Продукты</Link>
             </MenuItem>
             <MenuItem sx={[menuItemsStyles, menuItemsHoverStyles]}>
               Склады
@@ -40,7 +46,7 @@ export const Header = ({ toggleDrawer }: HeaderProps) => {
               О системе
             </MenuItem>
             <MenuItem sx={[menuItemsStyles, menuItemsHoverStyles]}>
-              Личная страница
+              <Link to="/profile">Личная страница</Link>
             </MenuItem>
           </MenuList>
         </nav>

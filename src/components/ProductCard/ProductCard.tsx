@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { ProductCardProps } from "./ProductCard.props";
-import { CardDialog } from "../CardDialog/CardDialog";
+import { ProductCardProps } from "@components/ProductCard/ProductCard.props";
+import { CardDialog } from "@components/CardDialog/CardDialog";
 import { Box, Card, CardMedia, Divider, Typography } from "@mui/material";
-import { MUIStyles } from "../../@types";
+import { MUIStyles } from "@/@types";
 
 export const ProductCard = (props: ProductCardProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);

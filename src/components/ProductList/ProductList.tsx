@@ -1,11 +1,14 @@
-import { ProductCard } from "../ProductCard/ProductCard";
-import { ProductCardProps } from "../ProductCard/ProductCard.props";
-import { ProductListProps } from "./ProductList.props";
-import { CARDS_PER_PAGE } from "../../App";
+import { ProductCard } from "@components/ProductCard/ProductCard";
+import { ProductCardProps } from "@components/ProductCard/ProductCard.props";
+import { ProductListProps } from "@components/ProductList/ProductList.props";
 import Box from "@mui/material/Box/Box";
-import { MUIStyles } from "../../@types";
-import { Context, ProductsContext } from "../ProductsProvider/ProductsProvider";
+import { MUIStyles } from "@/@types";
+import {
+  Context,
+  ProductsContext,
+} from "@components/ProductsProvider/ProductsProvider";
 import { useContext } from "react";
+import { CARDS_PER_PAGE } from "@pages/Products/Products";
 
 export type Product = ProductCardProps & { id: string };
 

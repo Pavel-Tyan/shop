@@ -1,5 +1,5 @@
 import SearchIcon from "@mui/icons-material/Search";
-import { DropdownMenu } from "../DropdownMenu/DropdownMenu";
+import { DropdownMenu } from "@components/DropdownMenu/DropdownMenu";
 import {
   Box,
   Button,
@@ -8,10 +8,10 @@ import {
   InputLabel,
   Typography,
 } from "@mui/material";
-import { MUIStyles } from "../../@types";
 import { useContext, useState } from "react";
 import { Context, ProductsContext } from "../ProductsProvider/ProductsProvider";
 import { SidebarProps } from "./Sidebar.props";
+import { MUIStyles } from "@/@types";
 
 export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
   const context = useContext<ProductsContext>(Context);

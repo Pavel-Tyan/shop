@@ -1,3 +1,4 @@
 export interface HeaderProps {
-  toggleDrawer: () => void;
+  hasDrawer: boolean;
+  toggleDrawer?: () => void;
 }

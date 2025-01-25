@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { MUIStyles } from "../../@types";
+import { MUIStyles } from "@/@types";
 import {
   Select,
   MenuItem,
@@ -7,7 +7,10 @@ import {
   InputLabel,
   Button,
 } from "@mui/material";
-import { ProductsContext, Context } from "../ProductsProvider/ProductsProvider";
+import {
+  ProductsContext,
+  Context,
+} from "@components/ProductsProvider/ProductsProvider";
 
 export const DropdownMenu = () => {
   const context = useContext<ProductsContext>(Context);

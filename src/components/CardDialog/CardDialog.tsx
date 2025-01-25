@@ -8,9 +8,9 @@ import {
   Typography,
   Divider,
 } from "@mui/material";
-import { CardDialogProps } from "./CardDialog.props";
+import { CardDialogProps } from "@components/CardDialog/CardDialog.props";
 import CloseIcon from "@mui/icons-material/Close";
-import { MUIStyles } from "../../@types";
+import { MUIStyles } from "@/@types";
 
 export const CardDialog = ({
   isOpen,
