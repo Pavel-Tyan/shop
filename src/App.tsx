@@ -6,6 +6,7 @@ import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 function App() {
   const Products = lazy(() => import("@pages/Products/Products"));
   const Profile = lazy(() => import("@pages/Profile/Profile"));
+  const Categories = lazy(() => import("@pages/Categories/Categories"));
 
   const loadingSpinnerStyles = {
     margin: "20px",
@@ -23,6 +24,14 @@ function App() {
           }
         />
         <Route
+          path="/products/:id."
+          element={
+            <Suspense fallback={<CircularProgress sx={loadingSpinnerStyles} />}>
+              <CircularProgress sx={loadingSpinnerStyles} />
+            </Suspense>
+          }
+        />
+        <Route
           path="/profile"
           element={
             <Suspense fallback={<CircularProgress sx={loadingSpinnerStyles} />}>
@@ -34,7 +43,7 @@ function App() {
           path="/categories"
           element={
             <Suspense fallback={<CircularProgress sx={loadingSpinnerStyles} />}>
-              <CircularProgress sx={loadingSpinnerStyles} />
+              <Categories />
             </Suspense>
           }
         />

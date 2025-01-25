@@ -23,11 +23,21 @@ export const categorySlice = createSlice({
       const index = state.categoryList.findIndex(
         (category) => category.name === name
       );
+
+      if (index === -1) {
+        return;
+      }
+
       state.categoryList.splice(index, 1);
     },
 
     addCategoryByName: (state, action: PayloadAction<string>) => {
-      // Проверь на дубликаты. Регистр там хз
+      for (const category of state.categoryList) {
+        if (category.name === action.payload) {
+          return;
+        }
+      }
+
       state.categoryList.push({ name: action.payload });
     },
   },

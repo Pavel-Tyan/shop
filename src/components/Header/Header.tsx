@@ -40,6 +40,9 @@ export const Header = ({
               <Link to="/">Продукты</Link>
             </MenuItem>
             <MenuItem sx={[menuItemsStyles, menuItemsHoverStyles]}>
+              <Link to="/categories">Категории</Link>
+            </MenuItem>
+            <MenuItem sx={[menuItemsStyles, menuItemsHoverStyles]}>
               Склады
             </MenuItem>
             <MenuItem sx={[menuItemsStyles, menuItemsHoverStyles]}>
