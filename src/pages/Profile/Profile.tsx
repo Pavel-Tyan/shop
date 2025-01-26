@@ -3,18 +3,9 @@ import Typography from "@mui/material/Typography/Typography";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
 import Card from "@mui/material/Card/Card";
 import { Layout } from "@layouts/Layout";
+import Box from "@mui/material/Box/Box";
 
 const Profile = () => {
-  //   const containerStyles: MUIStyles = {
-  //     display: "flex",
-  //     flexDirection: "column",
-  //     alignItems: "center",
-  //     gap: "100px",
-  //     width: "100%",
-  //     height: "100svh",
-  //     position: "relative",
-  //   };
-
   const profileCardStyles: MUIStyles = {
     display: "flex",
     alignItems: "center",
@@ -44,25 +35,34 @@ const Profile = () => {
     borderRadius: "7px",
   };
 
+  const containerStyles = {
+    display: "flex",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
   return (
     <Layout hasDrawer={false}>
-      <Card sx={profileCardStyles}>
-        <CardMedia
-          component="img"
-          image="./no-image.png"
-          alt={"Изображение " + name}
-          sx={avatarStyles}
-        />
-        <Typography variant="h1" sx={titleStyles}>
-          {"Имя"}
-        </Typography>
-        <Typography variant="h1" sx={titleStyles}>
-          {"Email"}
-        </Typography>
-        <Typography variant="h1" sx={titleStyles}>
-          {"Группа"}
-        </Typography>
-      </Card>
+      <Box sx={containerStyles}>
+        <Card sx={profileCardStyles}>
+          <CardMedia
+            component="img"
+            image="./no-image.png"
+            alt={"Изображение " + name}
+            sx={avatarStyles}
+          />
+          <Typography variant="h1" sx={titleStyles}>
+            {"Имя"}
+          </Typography>
+          <Typography variant="h1" sx={titleStyles}>
+            {"Email"}
+          </Typography>
+          <Typography variant="h1" sx={titleStyles}>
+            {"Группа"}
+          </Typography>
+        </Card>
+      </Box>
     </Layout>
   );
 };
