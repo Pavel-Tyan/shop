@@ -1,10 +1,21 @@
 import { MUIStyles } from "@/@types";
-import { CategoryCard } from "@/components/CategoryCard/CategoryCard";
+import { CategoryCardButton } from "@/components/CategoryCardButton/CategoryCardButton";
 import { useCategories } from "@/hooks/useCategories";
-import { Box } from "@mui/material";
+import { Layout } from "@/layouts/Layout";
+import { Category } from "@/redux/slices/categorySlice";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
+import { useState } from "react";
 
 const Categories = () => {
-  const { categories, addCategoryByName, deleteCategoryByName } =
+  const { categories, addCategory, deleteCategory, updateCategory } =
     useCategories();
 
   const wrapperStyles: MUIStyles = {
@@ -14,12 +25,74 @@ const Categories = () => {
     marginTop: "30px",
   };
 
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
+
+  const openDialog = (category: Category) => {
+    setIsDialogOpen(true);
+    setCurrentCategory(category);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
+
+  const [newCategoryName, setNewCategoryName] = useState<string>("");
+
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewCategoryName(event.target.value);
+  };
+
+  const submitNewCategoryName = () => {
+    updateCategory(currentCategory!, newCategoryName);
+    setNewCategoryName("");
+  };
+
+  const deleteCurrentCategory = () => {
+    deleteCategory(currentCategory!.name);
+    closeDialog();
+  };
+
   return (
-    <Box sx={wrapperStyles}>
-      {categories.map((category) => (
-        <CategoryCard key={category.name}>{category.name}</CategoryCard>
-      ))}
-    </Box>
+    <Layout hasDrawer={false}>
+      <Box sx={wrapperStyles}>
+        {categories.map((category) => (
+          <CategoryCardButton
+            key={category.name}
+            onClick={() => openDialog(category)}
+          >
+            {category.name}
+          </CategoryCardButton>
+        ))}
+        <Dialog open={isDialogOpen} onClose={closeDialog}>
+          <DialogContent>
+            <DialogTitle>Изменить/Удалить категорию</DialogTitle>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="name"
+              name="categoryName"
+              label="Новое имя категории"
+              type="text"
+              fullWidth
+              variant="standard"
+              value={newCategoryName}
+              onChange={onChange}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={deleteCurrentCategory}>Удалить</Button>
+            <Button type="submit" onClick={submitNewCategoryName}>
+              Изменить имя
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
+      <Box>
+        <Button>Добавить категорию</Button>
+      </Box>
+    </Layout>
   );
 };
 
