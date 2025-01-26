@@ -26,7 +26,8 @@
       "@pages/*": ["./src/pages/*"],
       "@redux/*": ["./src/redux/*"],
       "@types/*": ["./src/@types/*"],
-      "@router/*": ["./src/router/*"]
+      "@router/*": ["./src/router/*"],
+      "@layouts/*": ["./src/layouts/*"]
     }
   },
   "include": ["src"]
