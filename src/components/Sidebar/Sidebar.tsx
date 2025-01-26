@@ -1,17 +1,11 @@
 import SearchIcon from "@mui/icons-material/Search";
 import { DropdownMenu } from "@components/DropdownMenu/DropdownMenu";
-import {
-  Box,
-  Button,
-  Card,
-  Input,
-  InputLabel,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Input, InputLabel, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { Context, ProductsContext } from "../ProductsProvider/ProductsProvider";
 import { SidebarProps } from "./Sidebar.props";
 import { MUIStyles } from "@/@types";
+import { CategoryCard } from "../CategoryCard/CategoryCard";
 
 export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
   const context = useContext<ProductsContext>(Context);
@@ -77,15 +71,6 @@ export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
     color: "var(--secondary-color)",
   };
 
-  const categoryCardStyles: MUIStyles = {
-    width: "50%",
-    height: "35px",
-    background: "var(--blue)",
-    color: "var(--secondary-color)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
   return (
     <Box sx={sidebarWrapperStyles}>
       <Box sx={textInputWrapper}>
@@ -108,9 +93,7 @@ export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
       </InputLabel>
       <DropdownMenu />
       {currentCategories.map((item) => (
-        <Card sx={categoryCardStyles} key={item}>
-          {item}
-        </Card>
+        <CategoryCard key={item}>{item}</CategoryCard>
       ))}
     </Box>
   );
