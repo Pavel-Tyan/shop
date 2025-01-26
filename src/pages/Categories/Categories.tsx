@@ -31,6 +31,7 @@ const Categories = () => {
   const openDialog = (category: Category) => {
     setIsDialogOpen(true);
     setCurrentCategory(category);
+    setNewCategoryName(category.name);
   };
 
   const closeDialog = () => {
@@ -44,14 +45,20 @@ const Categories = () => {
   };
 
   const submitNewCategoryName = () => {
+    if (newCategoryName === "") {
+      return;
+    }
+
     updateCategory(currentCategory!, newCategoryName);
-    setNewCategoryName("");
+    closeDialog();
   };
 
   const deleteCurrentCategory = () => {
     deleteCategory(currentCategory!.name);
     closeDialog();
   };
+
+  const changeNameError = "Поле не может быть пустым";
 
   return (
     <Layout hasDrawer={false}>
@@ -79,6 +86,8 @@ const Categories = () => {
               variant="standard"
               value={newCategoryName}
               onChange={onChange}
+              error={!newCategoryName}
+              helperText={!newCategoryName && changeNameError}
             />
           </DialogContent>
           <DialogActions>
