@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Header } from "../../components/Header/Header";
 import { Sidebar } from "../../components/Sidebar/Sidebar";
 import { Product, ProductList } from "../../components/ProductList/ProductList";
 import { Box, Drawer, Pagination } from "@mui/material";
 import { MUIStyles } from "../../@types";
 import { ProductsProvider } from "../../components/ProductsProvider/ProductsProvider";
+import { Layout } from "@layouts/Layout";
 
 export const CARDS_PER_PAGE = 8;
 
@@ -115,16 +115,6 @@ const Products = () => {
 
   const pageCount = Math.ceil(products.length / CARDS_PER_PAGE);
 
-  const containerStyles: MUIStyles = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
-    height: "100svh",
-    position: "relative",
-  };
-
   const paginationWrapperStyles: MUIStyles = {
     display: "flex",
     justifyContent: "center",
@@ -150,8 +140,7 @@ const Products = () => {
   };
 
   return (
-    <Box sx={containerStyles}>
-      <Header hasDrawer={true} toggleDrawer={toggleDrawer} />
+    <Layout hasDrawer={true} toggleDrawer={toggleDrawer}>
       <ProductsProvider>
         <Drawer open={isDrawerOpen} onClose={toggleDrawer}>
           {<Sidebar toggleDrawer={toggleDrawer} />}
@@ -171,7 +160,7 @@ const Products = () => {
           ]}
         />
       </Box>
-    </Box>
+    </Layout>
   );
 };
 

@@ -1,20 +1,19 @@
-import Box from "@mui/material/Box/Box";
 import { MUIStyles } from "../../@types";
-import { Header } from "@components/Header/Header";
 import Typography from "@mui/material/Typography/Typography";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
 import Card from "@mui/material/Card/Card";
+import { Layout } from "@layouts/Layout";
 
 const Profile = () => {
-  const containerStyles: MUIStyles = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: "100px",
-    width: "100%",
-    height: "100svh",
-    position: "relative",
-  };
+  //   const containerStyles: MUIStyles = {
+  //     display: "flex",
+  //     flexDirection: "column",
+  //     alignItems: "center",
+  //     gap: "100px",
+  //     width: "100%",
+  //     height: "100svh",
+  //     position: "relative",
+  //   };
 
   const profileCardStyles: MUIStyles = {
     display: "flex",
@@ -46,8 +45,7 @@ const Profile = () => {
   };
 
   return (
-    <Box sx={containerStyles}>
-      <Header hasDrawer={false} />
+    <Layout hasDrawer={false}>
       <Card sx={profileCardStyles}>
         <CardMedia
           component="img"
@@ -65,7 +63,7 @@ const Profile = () => {
           {"Группа"}
         </Typography>
       </Card>
-    </Box>
+    </Layout>
   );
 };
 
