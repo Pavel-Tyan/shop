@@ -1,5 +1,5 @@
 import { Card } from "@mui/material";
-import { CategoryCardProps } from "./CategoryCard.props";
+import { CategoryCardProps } from "@components/CategoryCard/CategoryCard.props";
 import { MUIStyles } from "@/@types";
 
 export const CategoryCard = ({ children }: CategoryCardProps) => {

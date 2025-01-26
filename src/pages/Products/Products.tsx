@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Sidebar } from "../../components/Sidebar/Sidebar";
-import { Product, ProductList } from "../../components/ProductList/ProductList";
+import { Sidebar } from "@components/Sidebar/Sidebar";
+import { Product, ProductList } from "@components/ProductList/ProductList";
 import { Box, Drawer, Pagination } from "@mui/material";
-import { MUIStyles } from "../../@types";
-import { ProductsProvider } from "../../components/ProductsProvider/ProductsProvider";
+import { MUIStyles } from "@/@types";
+import { ProductsProvider } from "@components/ProductsProvider/ProductsProvider";
 import { Layout } from "@layouts/Layout";
 
 export const CARDS_PER_PAGE = 8;

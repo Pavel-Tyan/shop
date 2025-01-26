@@ -1,4 +1,4 @@
-import { MUIStyles } from "../../@types";
+import { MUIStyles } from "@/@types";
 import Typography from "@mui/material/Typography/Typography";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
 import Card from "@mui/material/Card/Card";
@@ -53,13 +53,13 @@ const Profile = () => {
             sx={avatarStyles}
           />
           <Typography variant="h1" sx={titleStyles}>
-            {"Имя"}
+            {"Имя: ..."}
           </Typography>
           <Typography variant="h1" sx={titleStyles}>
-            {"Email"}
+            {"Email: ..."}
           </Typography>
           <Typography variant="h1" sx={titleStyles}>
-            {"Группа"}
+            {"Группа: ..."}
           </Typography>
         </Card>
       </Box>
