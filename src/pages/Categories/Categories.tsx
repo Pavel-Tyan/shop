@@ -25,23 +25,55 @@ const Categories = () => {
     marginTop: "30px",
   };
 
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [currentCategory, setCurrentCategory] = useState<Category | null>(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
+  const [currentEditCategory, setCurrentEditCategory] =
+    useState<Category | null>(null);
+  const [editCategoryName, setEditCategoryName] = useState<string>("");
 
-  const openDialog = (category: Category) => {
-    setIsDialogOpen(true);
-    setCurrentCategory(category);
-    setNewCategoryName(category.name);
+  const openEditDialog = (category: Category) => {
+    setIsEditDialogOpen(true);
+    setCurrentEditCategory(category);
+    setEditCategoryName(category.name);
   };
 
-  const closeDialog = () => {
-    setIsDialogOpen(false);
+  const closeEditDialog = () => {
+    setIsEditDialogOpen(false);
   };
 
+  const onChangeEditCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditCategoryName(event.target.value);
+  };
+
+  const submitEditCategoryName = () => {
+    if (editCategoryName === "") {
+      return;
+    }
+
+    updateCategory(currentEditCategory!, editCategoryName);
+    closeEditDialog();
+  };
+
+  const deleteCurrentCategory = () => {
+    deleteCategory(currentEditCategory!.name);
+    closeEditDialog();
+  };
+
+  const changeNameError = "Поле не может быть пустым";
+
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
   const [newCategoryName, setNewCategoryName] = useState<string>("");
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeNewCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewCategoryName(event.target.value);
+  };
+
+  const closeAddDialog = () => {
+    setIsAddDialogOpen(false);
+  };
+
+  const openAddDialog = () => {
+    setIsAddDialogOpen(true);
+    setNewCategoryName("");
   };
 
   const submitNewCategoryName = () => {
@@ -49,16 +81,9 @@ const Categories = () => {
       return;
     }
 
-    updateCategory(currentCategory!, newCategoryName);
-    closeDialog();
+    addCategory(newCategoryName);
+    closeAddDialog();
   };
-
-  const deleteCurrentCategory = () => {
-    deleteCategory(currentCategory!.name);
-    closeDialog();
-  };
-
-  const changeNameError = "Поле не может быть пустым";
 
   return (
     <Layout hasDrawer={false}>
@@ -66,40 +91,63 @@ const Categories = () => {
         {categories.map((category) => (
           <CategoryCardButton
             key={category.name}
-            onClick={() => openDialog(category)}
+            onClick={() => openEditDialog(category)}
           >
             {category.name}
           </CategoryCardButton>
         ))}
-        <Dialog open={isDialogOpen} onClose={closeDialog}>
+        <Dialog open={isEditDialogOpen} onClose={closeEditDialog}>
           <DialogContent>
             <DialogTitle>Изменить/Удалить категорию</DialogTitle>
             <TextField
               autoFocus
               required
               margin="dense"
-              id="name"
-              name="categoryName"
+              id="editCategoryName"
+              name="editCategoryName"
               label="Новое имя категории"
               type="text"
               fullWidth
               variant="standard"
-              value={newCategoryName}
-              onChange={onChange}
-              error={!newCategoryName}
-              helperText={!newCategoryName && changeNameError}
+              value={editCategoryName}
+              onChange={onChangeEditCategory}
+              error={!editCategoryName}
+              helperText={!editCategoryName && changeNameError}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={deleteCurrentCategory}>Удалить</Button>
-            <Button type="submit" onClick={submitNewCategoryName}>
+            <Button type="submit" onClick={submitEditCategoryName}>
               Изменить имя
             </Button>
           </DialogActions>
         </Dialog>
       </Box>
       <Box>
-        <Button>Добавить категорию</Button>
+        <Button onClick={openAddDialog}>Добавить категорию</Button>
+        <Dialog open={isAddDialogOpen} onClose={closeAddDialog}>
+          <DialogContent>
+            <DialogTitle>Новая категория</DialogTitle>
+            <TextField
+              autoFocus
+              required
+              margin="dense"
+              id="newCategoryName"
+              name="newCategoryName"
+              label="Имя новой категории"
+              type="text"
+              fullWidth
+              variant="standard"
+              value={newCategoryName}
+              onChange={onChangeNewCategory}
+              error={!newCategoryName}
+              helperText={!newCategoryName && changeNameError}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={submitNewCategoryName}>Добавить категорию</Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Layout>
   );
