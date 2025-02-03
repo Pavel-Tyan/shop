@@ -26,6 +26,10 @@ const Categories = () => {
     marginTop: "30px",
   };
 
+  const buttonStyles: MUIStyles = {
+    marginBottom: "20px",
+  };
+
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
   const [currentEditCategory, setCurrentEditCategory] =
     useState<Category | null>(null);
@@ -125,7 +129,9 @@ const Categories = () => {
         </Dialog>
       </Box>
       <Box>
-        <Button onClick={openAddDialog}>Добавить категорию</Button>
+        <Button sx={buttonStyles} onClick={openAddDialog}>
+          Добавить категорию
+        </Button>
         <Dialog open={isAddDialogOpen} onClose={closeAddDialog}>
           <DialogContent>
             <DialogTitle>Новая категория</DialogTitle>
