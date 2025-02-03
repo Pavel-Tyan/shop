@@ -3,18 +3,28 @@ import { HorizontalDivider } from "@/components/HorizontalDivider/HorizontalDivi
 import { useProductActions } from "@/hooks/useProductActions";
 import { Layout } from "@/layouts/Layout";
 import { useAppSelector } from "@/redux/hooks";
-import { Box, Card, CardMedia, Typography } from "@mui/material";
+import { Box, Button, Card, CardMedia, Typography } from "@mui/material";
 import { useParams } from "react-router";
 
 const ProductInfo = () => {
+  const containerStyles: MUIStyles = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    height: "100%",
+  };
+
   const cardStyles: MUIStyles = {
+    padding: "20px",
     display: "flex",
     alignItems: "center",
-    flexDirection: "column",
-    gap: "10px",
+    gap: "30px",
     background: "var(--gray)",
-    width: "750px",
-    height: "400px",
+    width: "1100px",
+    height: "430px",
     borderRadius: "7px",
     border: "none",
     color: "var(--secondary-color)",
@@ -22,13 +32,18 @@ const ProductInfo = () => {
   };
 
   const imageStyles: MUIStyles = {
-    width: "100%",
-    height: "350px",
+    width: "30%",
+    height: "100%",
     objectFit: "cover",
     borderRadius: "7px",
   };
 
+  const contentStyles: MUIStyles = {
+    width: "100%",
+  };
+
   const titleStyles: MUIStyles = {
+    marginTop: "10px",
     marginBottom: "10px",
     fontSize: "18px",
     fontWeight: 800,
@@ -39,7 +54,7 @@ const ProductInfo = () => {
     textAlign: "left",
     textOverflow: "ellipsis",
     overflow: "hidden",
-    height: "50px",
+    height: "200px",
     textWrap: "balance",
   };
 
@@ -53,49 +68,54 @@ const ProductInfo = () => {
 
   return (
     <Layout hasDrawer={false}>
-      <Card sx={cardStyles}>
-        {currentProduct?.img && (
-          <CardMedia
-            component="img"
-            image={currentProduct.img}
-            alt={"Изображение " + currentProduct.name}
-            sx={imageStyles}
-          />
-        )}
-        {!currentProduct?.img && (
-          <CardMedia
-            component="img"
-            image="./no-image.png"
-            alt={"Изображение " + currentProduct?.name}
-            sx={imageStyles}
-          />
-        )}
-        <Box>
-          <Typography sx={titleStyles} variant="h1">
-            {currentProduct?.name}
-          </Typography>
-          <HorizontalDivider />
-          <Typography sx={titleStyles} variant="h1">
-            {"Категория: " + currentProduct?.category}
-          </Typography>
-          <HorizontalDivider />
-          <Typography sx={titleStyles} variant="h1">
-            Описание
-          </Typography>
-          <Typography sx={textStyles}>{currentProduct?.description}</Typography>
-          <HorizontalDivider />
-          <Typography sx={titleStyles} variant="h1">
-            {"Категория: " + currentProduct?.category}
-          </Typography>
-          <HorizontalDivider />
-          <Typography sx={titleStyles} variant="h1">
-            {"Доступное количество: " +
-              currentProduct?.count +
-              " " +
-              currentProduct?.measure}
-          </Typography>
-        </Box>
-      </Card>
+      <Box sx={containerStyles}>
+        <Card sx={cardStyles}>
+          {currentProduct?.img && (
+            <CardMedia
+              component="img"
+              image={currentProduct.img}
+              alt={"Изображение " + currentProduct.name}
+              sx={imageStyles}
+            />
+          )}
+          {!currentProduct?.img && (
+            <CardMedia
+              component="img"
+              image="/no-image.png"
+              alt={"Изображение " + currentProduct?.name}
+              sx={imageStyles}
+            />
+          )}
+          <Box sx={contentStyles}>
+            <Typography sx={titleStyles} variant="h1">
+              {currentProduct?.name}
+            </Typography>
+            <HorizontalDivider />
+            <Typography sx={titleStyles} variant="h1">
+              {"Категория: " + currentProduct?.category}
+            </Typography>
+            <HorizontalDivider />
+            <Typography sx={titleStyles} variant="h1">
+              Описание
+            </Typography>
+            <Typography sx={textStyles}>
+              {currentProduct?.description}
+            </Typography>
+            <HorizontalDivider />
+            <Typography sx={titleStyles} variant="h1">
+              {"Категория: " + currentProduct?.category}
+            </Typography>
+            <HorizontalDivider />
+            <Typography sx={titleStyles} variant="h1">
+              {"Доступное количество: " +
+                currentProduct?.count +
+                " " +
+                currentProduct?.measure}
+            </Typography>
+          </Box>
+        </Card>
+        <Button>Редактировать информацию</Button>
+      </Box>
     </Layout>
   );
 };
