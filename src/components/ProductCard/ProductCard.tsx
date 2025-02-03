@@ -1,16 +1,10 @@
-import { useState } from "react";
 import { ProductCardProps } from "@components/ProductCard/ProductCard.props";
-import { CardDialog } from "@components/CardDialog/CardDialog";
-import { Box, Card, CardMedia, Divider, Typography } from "@mui/material";
+import { Box, Card, CardMedia, Typography } from "@mui/material";
 import { MUIStyles } from "@/@types";
+import { useNavigate } from "react-router";
+import { HorizontalDivider } from "../HorizontalDivider/HorizontalDivider";
 
 export const ProductCard = (props: ProductCardProps) => {
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-
-  const toggleDialog = () => {
-    setIsDialogOpen(!isDialogOpen);
-  };
-
   const cardStyles: MUIStyles = {
     display: "flex",
     alignItems: "center",
@@ -65,17 +59,14 @@ export const ProductCard = (props: ProductCardProps) => {
     textWrap: "balance",
   };
 
-  const dividerStyles: MUIStyles = {
-    width: "100%",
-    background: "var(--secondary-color)",
-  };
+  const { name, description, img, id } = props;
 
-  const { name, description, img } = props;
+  const navigate = useNavigate();
 
   return (
     <>
       <Card
-        onClick={toggleDialog}
+        onClick={() => navigate(`/products/${id}`)}
         sx={[cardStyles, { "&:hover": cardHoverStyles }]}
       >
         {img && (
@@ -98,15 +89,10 @@ export const ProductCard = (props: ProductCardProps) => {
           <Typography variant="h1" sx={cardTitleStyles}>
             {name}
           </Typography>
-          <Divider sx={dividerStyles} />
+          <HorizontalDivider />
           <Typography sx={cardTextStyles}>{description}</Typography>
         </Box>
       </Card>
-      <CardDialog
-        isOpen={isDialogOpen}
-        productInfo={props}
-        closeDialog={toggleDialog}
-      />
     </>
   );
 };
