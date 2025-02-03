@@ -33,7 +33,7 @@ const initialState: ProductListState = {
       category: "Еда",
       count: 10,
       measure: "шт",
-      img: "./pizza-1.png",
+      img: "/pizza-1.png",
     },
     {
       id: "3",
@@ -43,7 +43,7 @@ const initialState: ProductListState = {
       category: "Еда",
       count: 10,
       measure: "шт",
-      img: "./pizza-1.png",
+      img: "/pizza-1.png",
     },
     {
       id: "4",
@@ -53,7 +53,7 @@ const initialState: ProductListState = {
       category: "Еда",
       count: 10,
       measure: "шт",
-      img: "./pizza-1.png",
+      img: "/pizza-1.png",
     },
     {
       id: "5",

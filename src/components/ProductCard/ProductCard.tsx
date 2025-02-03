@@ -80,7 +80,7 @@ export const ProductCard = (props: ProductCardProps) => {
         {!img && (
           <CardMedia
             component="img"
-            image="./no-image.png"
+            image="/no-image.png"
             alt={"Изображение " + name}
             sx={cardImageStyles}
           />
