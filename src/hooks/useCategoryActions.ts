@@ -1,7 +1,7 @@
 import { useAppDispatch } from "@/redux/hooks";
 import { Category, categoryActions } from "@/redux/slices/categorySlice";
 
-export const useCategoriesActions = () => {
+export const useCategoryActions = () => {
   const dispatch = useAppDispatch();
 
   const addCategory = (name: string) => {
