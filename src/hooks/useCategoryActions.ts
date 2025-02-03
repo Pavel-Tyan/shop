@@ -1,8 +1,7 @@
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppDispatch } from "@/redux/hooks";
 import { Category, categoryActions } from "@/redux/slices/categorySlice";
 
-export const useCategories = () => {
-  const categories = useAppSelector((state) => state.categories.categoryList);
+export const useCategoriesActions = () => {
   const dispatch = useAppDispatch();
 
   const addCategory = (name: string) => {
@@ -18,7 +17,6 @@ export const useCategories = () => {
   };
 
   return {
-    categories,
     addCategory,
     deleteCategory,
     updateCategory,

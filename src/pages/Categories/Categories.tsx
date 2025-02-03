@@ -1,7 +1,8 @@
 import { MUIStyles } from "@/@types";
 import { CategoryCardButton } from "@/components/CategoryCardButton/CategoryCardButton";
-import { useCategories } from "@/hooks/useCategories";
+import { useCategoryActions } from "@/hooks/useCategoryActions";
 import { Layout } from "@/layouts/Layout";
+import { useAppSelector } from "@/redux/hooks";
 import { Category } from "@/redux/slices/categorySlice";
 import {
   Box,
@@ -15,8 +16,8 @@ import {
 import { useState } from "react";
 
 const Categories = () => {
-  const { categories, addCategory, deleteCategory, updateCategory } =
-    useCategories();
+  const categories = useAppSelector((state) => state.categories.categoryList);
+  const { addCategory, deleteCategory, updateCategory } = useCategoryActions();
 
   const wrapperStyles: MUIStyles = {
     display: "grid",
