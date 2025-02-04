@@ -1,9 +1,10 @@
 import { MUIStyles } from "@/@types";
 import { CategoryCardButton } from "@/components/CategoryCardButton/CategoryCardButton";
+import { EMPTY_INPUT_ERROR_MESSAGE } from "@/constants";
 import { useCategoryActions } from "@/hooks/useCategoryActions";
 import { Layout } from "@/layouts/Layout";
 import { useAppSelector } from "@/redux/hooks";
-import { Category } from "@/redux/slices/categorySlice";
+
 import {
   Box,
   Button,
@@ -31,14 +32,15 @@ const Categories = () => {
   };
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
-  const [currentEditCategory, setCurrentEditCategory] =
-    useState<Category | null>(null);
+  const [currentEditCategory, setCurrentEditCategory] = useState<string | null>(
+    null
+  );
   const [editCategoryName, setEditCategoryName] = useState<string>("");
 
-  const openEditDialog = (category: Category) => {
+  const openEditDialog = (category: string) => {
     setIsEditDialogOpen(true);
     setCurrentEditCategory(category);
-    setEditCategoryName(category.name);
+    setEditCategoryName(category);
   };
 
   const closeEditDialog = () => {
@@ -59,11 +61,9 @@ const Categories = () => {
   };
 
   const deleteCurrentCategory = () => {
-    deleteCategory(currentEditCategory!.name);
+    deleteCategory(currentEditCategory!);
     closeEditDialog();
   };
-
-  const changeNameError = "Поле не может быть пустым";
 
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
   const [newCategoryName, setNewCategoryName] = useState<string>("");
@@ -95,10 +95,10 @@ const Categories = () => {
       <Box sx={wrapperStyles}>
         {categories.map((category) => (
           <CategoryCardButton
-            key={category.name}
+            key={category}
             onClick={() => openEditDialog(category)}
           >
-            {category.name}
+            {category}
           </CategoryCardButton>
         ))}
         <Dialog open={isEditDialogOpen} onClose={closeEditDialog}>
@@ -117,7 +117,7 @@ const Categories = () => {
               value={editCategoryName}
               onChange={onChangeEditCategory}
               error={!editCategoryName}
-              helperText={!editCategoryName && changeNameError}
+              helperText={!editCategoryName && EMPTY_INPUT_ERROR_MESSAGE}
             />
           </DialogContent>
           <DialogActions>
@@ -148,7 +148,7 @@ const Categories = () => {
               value={newCategoryName}
               onChange={onChangeNewCategory}
               error={!newCategoryName}
-              helperText={!newCategoryName && changeNameError}
+              helperText={!newCategoryName && EMPTY_INPUT_ERROR_MESSAGE}
             />
           </DialogContent>
           <DialogActions>
