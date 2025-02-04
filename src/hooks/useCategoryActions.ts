@@ -1,5 +1,5 @@
 import { useAppDispatch } from "@/redux/hooks";
-import { Category, categoryActions } from "@/redux/slices/categorySlice";
+import { categoryActions } from "@/redux/slices/categorySlice";
 
 export const useCategoryActions = () => {
   const dispatch = useAppDispatch();
@@ -12,7 +12,7 @@ export const useCategoryActions = () => {
     dispatch(categoryActions.deleteCategory(name));
   };
 
-  const updateCategory = (category: Category, newName: string) => {
+  const updateCategory = (category: string, newName: string) => {
     dispatch(categoryActions.updateCategory({ category, newName }));
   };
 

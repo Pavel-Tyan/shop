@@ -1,24 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface Category {
-  name: string;
-}
-
 interface CategoryListState {
-  categoryList: Category[];
+  categoryList: string[];
 }
 
 const initialState: CategoryListState = {
-  categoryList: [
-    { name: "Еда" },
-    { name: "Канцелярия" },
-    { name: "Еда1" },
-    { name: "Еда2" },
-    { name: "Еда3" },
-    { name: "Еда4" },
-    { name: "Еда5" },
-  ],
+  categoryList: ["Еда", "Канцелярия", "Еда1", "Еда2", "Еда3", "Еда4", "Еда5"],
 };
 
 export const categorySlice = createSlice({
@@ -29,7 +17,7 @@ export const categorySlice = createSlice({
       const name = action.payload;
 
       const index = state.categoryList.findIndex(
-        (category) => category.name === name
+        (category) => category === name
       );
 
       if (index === -1) {
@@ -41,25 +29,25 @@ export const categorySlice = createSlice({
 
     addCategory: (state, action: PayloadAction<string>) => {
       for (const category of state.categoryList) {
-        if (category.name === action.payload) {
+        if (category === action.payload) {
           return;
         }
       }
 
-      state.categoryList.push({ name: action.payload });
+      state.categoryList.push(action.payload);
     },
 
     updateCategory: (
       state,
-      action: PayloadAction<{ category: Category; newName: string }>
+      action: PayloadAction<{ category: string; newName: string }>
     ) => {
       const { category, newName } = action.payload;
 
       const index = state.categoryList.findIndex(
-        (current) => current.name === category.name
+        (current) => current === category
       );
 
-      state.categoryList[index].name = newName;
+      state.categoryList[index] = newName;
     },
   },
 });
