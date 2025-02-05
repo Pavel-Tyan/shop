@@ -21,9 +21,7 @@ import { Layout } from "@layouts/Layout";
 import { useAppSelector } from "@/redux/hooks";
 import { useProductActions } from "@/hooks/useProductActions";
 import { generateUid } from "@/utils";
-import { EMPTY_INPUT_ERROR_MESSAGE } from "@/constants";
-
-export const CARDS_PER_PAGE = 8;
+import { CARDS_PER_PAGE, EMPTY_INPUT_ERROR_MESSAGE } from "@/constants";
 
 const Products = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
