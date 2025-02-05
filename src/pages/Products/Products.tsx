@@ -1,10 +1,28 @@
 import { useState } from "react";
 import { Sidebar } from "@components/Sidebar/Sidebar";
 import { ProductList } from "@components/ProductList/ProductList";
-import { Box, Drawer, Pagination } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Drawer,
+  InputLabel,
+  MenuItem,
+  Pagination,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from "@mui/material";
 import { MUIStyles } from "@/@types";
 import { Layout } from "@layouts/Layout";
 import { useAppSelector } from "@/redux/hooks";
+import { useProductActions } from "@/hooks/useProductActions";
+import { generateUid } from "@/utils";
+import { EMPTY_INPUT_ERROR_MESSAGE } from "@/constants";
+
 export const CARDS_PER_PAGE = 8;
 
 const Products = () => {
@@ -42,6 +60,51 @@ const Products = () => {
 
   const pageCount = Math.ceil(searchedProducts.length / CARDS_PER_PAGE);
 
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const [name, setName] = useState<string>("");
+
+  const categories = useAppSelector((state) => state.categories.categoryList);
+  const [category, setCategory] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [measure, setMeasure] = useState<string>("");
+  const [count, setCount] = useState<number>(0);
+
+  const onChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+  };
+
+  const onChangeCategory = (event: SelectChangeEvent<string>) => {
+    setCategory(event.target.value);
+  };
+
+  const onChangeDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDescription(event.target.value);
+  };
+
+  const onChangeCount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCount(Number(event.target.value));
+  };
+
+  const onChangeMeasure = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMeasure(event.target.value);
+  };
+
+  const { addProduct } = useProductActions();
+
+  const handleSubmit = () => {
+    addProduct({
+      id: generateUid(),
+      name,
+      category,
+      description,
+      measure,
+      count,
+    });
+
+    setIsDialogOpen(false);
+  };
+
   const paginationWrapperStyles: MUIStyles = {
     display: "flex",
     justifyContent: "center",
@@ -66,12 +129,19 @@ const Products = () => {
     },
   };
 
+  const buttonStyles: MUIStyles = {
+    marginTop: "30px",
+  };
+
   return (
     <Layout hasDrawer={true} toggleDrawer={toggleDrawer}>
       <Drawer open={isDrawerOpen} onClose={toggleDrawer}>
         <Sidebar toggleDrawer={toggleDrawer} />
       </Drawer>
       <ProductList currentPage={currentPage} products={searchedProducts} />
+      <Button sx={buttonStyles} onClick={() => setIsDialogOpen(true)}>
+        Добавить новый продукт
+      </Button>
       <Box sx={paginationWrapperStyles}>
         <Pagination
           count={pageCount}
@@ -85,6 +155,86 @@ const Products = () => {
           ]}
         />
       </Box>
+      <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
+        <DialogContent>
+          <DialogTitle>Изменить информацию о продукте</DialogTitle>
+          <TextField
+            required
+            margin="dense"
+            id="name"
+            name="name"
+            label="Имя"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={name}
+            onChange={onChangeName}
+            error={!name}
+            helperText={!name && EMPTY_INPUT_ERROR_MESSAGE}
+          />
+          <InputLabel id="category">Категория</InputLabel>
+          <Select
+            labelId="category"
+            id="category"
+            value={category}
+            label="Age"
+            onChange={onChangeCategory}
+          >
+            {categories.map((category) => (
+              <MenuItem key={category} value={category}>
+                {category}
+              </MenuItem>
+            ))}
+          </Select>
+          <TextField
+            required
+            margin="dense"
+            id="description"
+            name="description"
+            label="Описание"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={description}
+            onChange={onChangeDescription}
+            error={!description}
+            helperText={!description && EMPTY_INPUT_ERROR_MESSAGE}
+          />
+          <TextField
+            required
+            margin="dense"
+            id="measure"
+            name="measure"
+            label="Единица количества"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={measure}
+            onChange={onChangeMeasure}
+            error={!measure}
+            helperText={!measure && EMPTY_INPUT_ERROR_MESSAGE}
+          />
+          <TextField
+            required
+            margin="dense"
+            id="count"
+            name="count"
+            label="Количество"
+            type="number"
+            fullWidth
+            variant="standard"
+            value={count}
+            onChange={onChangeCount}
+            error={!count}
+            helperText={!count && EMPTY_INPUT_ERROR_MESSAGE}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button type="submit" onClick={handleSubmit}>
+            Подтвердить
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Layout>
   );
 };
