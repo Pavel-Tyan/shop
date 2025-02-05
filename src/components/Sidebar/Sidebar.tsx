@@ -1,27 +1,49 @@
 import SearchIcon from "@mui/icons-material/Search";
-import { DropdownMenu } from "@components/DropdownMenu/DropdownMenu";
-import { Box, Button, Input, InputLabel, Typography } from "@mui/material";
-import { useContext, useState } from "react";
-import { Context, ProductsContext } from "../ProductsProvider/ProductsProvider";
+import {
+  Box,
+  Button,
+  Input,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from "@mui/material";
+import { useState } from "react";
 import { SidebarProps } from "./Sidebar.props";
 import { MUIStyles } from "@/@types";
-import { CategoryCard } from "../CategoryCard/CategoryCard";
+import { useSearchParamActions } from "@/hooks/useSearchParamActions";
+import { useAppSelector } from "@/redux/hooks";
+import { NO_CATEGORY_FILTER_MESSAGE } from "@/constants";
 
 export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
-  const context = useContext<ProductsContext>(Context);
-
-  const currentCategories = context ? context.currentCategories : [];
-
-  const searchProducts = context ? context.searchProducts : () => {};
+  const { updateFilterCategory, updateSearchValue } = useSearchParamActions();
 
   const handleClick = () => {
-    searchProducts(searchValue);
     toggleDrawer();
+    updateSearchValue(searchValue);
+
+    if (filterCategory === NO_CATEGORY_FILTER_MESSAGE) {
+      updateFilterCategory("");
+      return;
+    }
+
+    updateFilterCategory(filterCategory);
   };
 
   const [searchValue, setSearchValue] = useState<string>("");
+
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setSearchValue(event.target.value);
+
+  const [filterCategory, setFilterCategory] = useState<string>(
+    NO_CATEGORY_FILTER_MESSAGE
+  );
+
+  const categories = useAppSelector((state) => state.categories.categoryList);
+  const onChangeFilterCategory = (event: SelectChangeEvent<string>) => {
+    setFilterCategory(event.target.value);
+  };
 
   const sidebarWrapperStyles: MUIStyles = {
     width: "320px",
@@ -71,6 +93,13 @@ export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
     color: "var(--secondary-color)",
   };
 
+  const filterInputLabelStyles: MUIStyles = { color: "var(--secondary-color)" };
+
+  const filterInputStyles: MUIStyles = {
+    color: "var(--secondary-color)",
+    background: "var(--gray)",
+  };
+
   return (
     <Box sx={sidebarWrapperStyles}>
       <Box sx={textInputWrapper}>
@@ -91,10 +120,26 @@ export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
         <Input sx={checkboxStyles} type="checkbox" />
         <Typography color="inherited">Не пустой склад</Typography>
       </InputLabel>
-      <DropdownMenu />
-      {currentCategories.map((item) => (
-        <CategoryCard key={item}>{item}</CategoryCard>
-      ))}
+      <InputLabel sx={filterInputLabelStyles} id="category">
+        Фильтр по категории
+      </InputLabel>
+      <Select
+        sx={filterInputStyles}
+        labelId="category"
+        id="category"
+        value={filterCategory}
+        label="Фильтр"
+        onChange={onChangeFilterCategory}
+      >
+        {categories.map((category) => (
+          <MenuItem key={category} value={category}>
+            {category}
+          </MenuItem>
+        ))}
+        <MenuItem key={""} value={NO_CATEGORY_FILTER_MESSAGE}>
+          {NO_CATEGORY_FILTER_MESSAGE}
+        </MenuItem>
+      </Select>
     </Box>
   );
 };

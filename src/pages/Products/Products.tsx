@@ -1,102 +1,11 @@
 import { useState } from "react";
 import { Sidebar } from "@components/Sidebar/Sidebar";
-import { Product, ProductList } from "@components/ProductList/ProductList";
+import { ProductList } from "@components/ProductList/ProductList";
 import { Box, Drawer, Pagination } from "@mui/material";
 import { MUIStyles } from "@/@types";
-import { ProductsProvider } from "@components/ProductsProvider/ProductsProvider";
 import { Layout } from "@layouts/Layout";
-
+import { useAppSelector } from "@/redux/hooks";
 export const CARDS_PER_PAGE = 8;
-
-// Замокаем данные, которые по хорошему идут с бекенда.
-const products: Product[] = [
-  {
-    id: "1",
-    name: "Молоко",
-    description: "Молоко 3,5%",
-    category: "Еда",
-    count: 5,
-    measure: "л",
-  },
-  {
-    id: "2",
-    name: "Пицца маргарита",
-    description:
-      "традиционное итальянское блюдо, изначально в виде круглой дрожжевой лепёшки, выпекаемой с уложенной сверху начинкой из томатного соуса, сыра и зачастую других ингредиентов, таких как мясо, овощи, грибы и прочие продукты. Небольшую пиццу иногда называют пиццеттой. Повар, специализирующийся на приготовлении пиццы, — пиццайоло.",
-    category: "Еда",
-    count: 10,
-    measure: "шт",
-    img: "./pizza-1.png",
-  },
-  {
-    id: "3",
-    name: "Сырная пицца",
-    description:
-      "традиционное итальянское блюдо, изначально в виде круглой дрожжевой лепёшки, выпекаемой с уложенной сверху начинкой из томатного соуса, сыра и зачастую других ингредиентов, таких как мясо, овощи, грибы и прочие продукты. Небольшую пиццу иногда называют пиццеттой. Повар, специализирующийся на приготовлении пиццы, — пиццайоло.",
-    category: "Еда",
-    count: 10,
-    measure: "шт",
-    img: "./pizza-1.png",
-  },
-  {
-    id: "4",
-    name: "Гавайская пицца",
-    description:
-      "традиционное итальянское блюдо, изначально в виде круглой дрожжевой лепёшки, выпекаемой с уложенной сверху начинкой из томатного соуса, сыра и зачастую других ингредиентов, таких как мясо, овощи, грибы и прочие продукты. Небольшую пиццу иногда называют пиццеттой. Повар, специализирующийся на приготовлении пиццы, — пиццайоло.",
-    category: "Еда",
-    count: 10,
-    measure: "шт",
-    img: "./pizza-1.png",
-  },
-  {
-    id: "5",
-    name: "Тетради",
-    description: "Тетради 64 листа",
-    category: "Канцелярия",
-    count: 100,
-    measure: "шт",
-  },
-  {
-    id: "6",
-    name: "Альбом",
-    description: "Альбом 24 листа",
-    category: "Канцелярия",
-    count: 50,
-    measure: "шт",
-  },
-  {
-    id: "7",
-    name: "Альбом",
-    description: "Альбом 24 листа",
-    category: "Канцелярия",
-    count: 50,
-    measure: "шт",
-  },
-  {
-    id: "8",
-    name: "Альбом",
-    description: "Альбом 24 листа",
-    category: "Канцелярия",
-    count: 50,
-    measure: "шт",
-  },
-  {
-    id: "9",
-    name: "Альбом",
-    description: "Альбом 24 листа",
-    category: "Канцелярия",
-    count: 50,
-    measure: "шт",
-  },
-  {
-    id: "10",
-    name: "Альбом",
-    description: "Альбом 24 листа",
-    category: "Канцелярия",
-    count: 50,
-    measure: "шт",
-  },
-];
 
 const Products = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
@@ -113,7 +22,25 @@ const Products = () => {
     setCurrentPage(page);
   };
 
-  const pageCount = Math.ceil(products.length / CARDS_PER_PAGE);
+  const filterCategory = useAppSelector(
+    (state) => state.searchParams.categoryFilter
+  );
+
+  const searchValue = useAppSelector((state) => state.searchParams.searchValue);
+
+  const searchedProducts = useAppSelector((state) => {
+    const products = state.products.productList;
+    return products.filter((product) => {
+      // Проверяем, что продукт соответствует категории
+      if (filterCategory && product.category !== filterCategory) {
+        return false;
+      }
+      // Проверяем на соответствие значения в поле поиска
+      return product.name.toLowerCase().includes(searchValue.toLowerCase());
+    });
+  });
+
+  const pageCount = Math.ceil(searchedProducts.length / CARDS_PER_PAGE);
 
   const paginationWrapperStyles: MUIStyles = {
     display: "flex",
@@ -141,12 +68,10 @@ const Products = () => {
 
   return (
     <Layout hasDrawer={true} toggleDrawer={toggleDrawer}>
-      <ProductsProvider>
-        <Drawer open={isDrawerOpen} onClose={toggleDrawer}>
-          {<Sidebar toggleDrawer={toggleDrawer} />}
-        </Drawer>
-        <ProductList currentPage={currentPage} />
-      </ProductsProvider>
+      <Drawer open={isDrawerOpen} onClose={toggleDrawer}>
+        <Sidebar toggleDrawer={toggleDrawer} />
+      </Drawer>
+      <ProductList currentPage={currentPage} products={searchedProducts} />
       <Box sx={paginationWrapperStyles}>
         <Pagination
           count={pageCount}
