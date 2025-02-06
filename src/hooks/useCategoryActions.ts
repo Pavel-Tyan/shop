@@ -10,6 +10,9 @@ export const useCategoryActions = () => {
   };
 
   const deleteCategory = (name: string) => {
+    dispatch(
+      productActions.updateCategoryName({ category: name, newName: "" })
+    );
     dispatch(categoryActions.deleteCategory(name));
   };
 
