@@ -141,17 +141,19 @@ const Products = () => {
         Добавить новый продукт
       </Button>
       <Box sx={paginationWrapperStyles}>
-        <Pagination
-          count={pageCount}
-          page={currentPage}
-          onChange={changeCurrentPage}
-          variant="outlined"
-          sx={[
-            paginationStyles,
-            paginationItemStyles,
-            paginationItemHoverStyles,
-          ]}
-        />
+        {pageCount && (
+          <Pagination
+            count={pageCount}
+            page={currentPage}
+            onChange={changeCurrentPage}
+            variant="outlined"
+            sx={[
+              paginationStyles,
+              paginationItemStyles,
+              paginationItemHoverStyles,
+            ]}
+          />
+        )}
       </Box>
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
         <DialogContent>

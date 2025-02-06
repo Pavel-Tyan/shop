@@ -133,6 +133,18 @@ export const productSlice = createSlice({
         state.productList[index] = updatedProduct;
       }
     },
+
+    updateCategoryName: (
+      state,
+      action: PayloadAction<{ category: string; newName: string }>
+    ) => {
+      const { category, newName: updatedCategory } = action.payload;
+      state.productList.forEach((product) => {
+        if (product.category === category) {
+          product.category = updatedCategory;
+        }
+      });
+    },
   },
 });
 
