@@ -4,6 +4,7 @@ import { ProductList } from "@components/ProductList/ProductList";
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -15,13 +16,21 @@ import {
   Select,
   SelectChangeEvent,
   TextField,
+  Typography,
 } from "@mui/material";
 import { MUIStyles } from "@/@types";
 import { Layout } from "@layouts/Layout";
 import { useAppSelector } from "@/redux/hooks";
-import { useProductActions } from "@/hooks/useProductActions";
-import { generateUid } from "@/utils";
-import { CARDS_PER_PAGE, EMPTY_INPUT_ERROR_MESSAGE } from "@/constants";
+import {
+  CARDS_PER_PAGE,
+  EMPTY_INPUT_ERROR_MESSAGE,
+  PRODUCT_LIMIT,
+} from "@/constants";
+import {
+  useGetCategoriesQuery,
+  useGetProductsQuery,
+  usePostProductMutation,
+} from "@/redux/api/api";
 
 const Products = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
@@ -44,25 +53,30 @@ const Products = () => {
 
   const searchValue = useAppSelector((state) => state.searchParams.searchValue);
 
-  const searchedProducts = useAppSelector((state) => {
-    const products = state.products.productList;
-    return products.filter((product) => {
-      // Проверяем, что продукт соответствует категории
-      if (filterCategory && product.category !== filterCategory) {
-        return false;
-      }
-      // Проверяем на соответствие значения в поле поиска
-      return product.name.toLowerCase().includes(searchValue.toLowerCase());
-    });
+  const {
+    data: products = [],
+    isLoading,
+    error,
+  } = useGetProductsQuery({
+    limit: PRODUCT_LIMIT,
+    offset: 0,
+  });
+
+  const searchedProducts = products.filter((product) => {
+    // Проверяем, что продукт соответствует категории
+    if (filterCategory && product.category !== filterCategory) {
+      return false;
+    }
+    // Проверяем на соответствие значения в поле поиска
+    return product.name.toLowerCase().includes(searchValue.toLowerCase());
   });
 
   const pageCount = Math.ceil(searchedProducts.length / CARDS_PER_PAGE);
-
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const [name, setName] = useState<string>("");
 
-  const categories = useAppSelector((state) => state.categories.categoryList);
+  const { data: categories } = useGetCategoriesQuery();
   const [category, setCategory] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [measure, setMeasure] = useState<string>("");
@@ -88,16 +102,16 @@ const Products = () => {
     setMeasure(event.target.value);
   };
 
-  const { addProduct } = useProductActions();
+  const [postProduct] = usePostProductMutation();
 
   const handleSubmit = () => {
-    addProduct({
-      id: generateUid(),
+    postProduct({
       name,
       category,
       description,
       measure,
       count,
+      img: "",
     });
 
     setIsDialogOpen(false);
@@ -130,6 +144,28 @@ const Products = () => {
   const buttonStyles: MUIStyles = {
     marginTop: "30px",
   };
+
+  const loadingSpinnerStyles: MUIStyles = {
+    margin: "20px",
+  };
+
+  const errorMessageStyles: MUIStyles = {
+    margin: "20px",
+    color: "var(--secondary-color)",
+    fontSize: "20px",
+  };
+
+  if (error) {
+    return (
+      <Typography sx={errorMessageStyles}>
+        Произошла ошибка. Попробуйте перезагрузить страницу
+      </Typography>
+    );
+  }
+
+  if (isLoading) {
+    return <CircularProgress sx={loadingSpinnerStyles} />;
+  }
 
   return (
     <Layout hasDrawer={true} toggleDrawer={toggleDrawer}>
@@ -180,9 +216,9 @@ const Products = () => {
             label="Age"
             onChange={onChangeCategory}
           >
-            {categories.map((category) => (
-              <MenuItem key={category} value={category}>
-                {category}
+            {categories?.map((category) => (
+              <MenuItem key={category.id} value={category.name}>
+                {category.name}
               </MenuItem>
             ))}
           </Select>
