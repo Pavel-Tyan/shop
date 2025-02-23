@@ -13,8 +13,8 @@ import { useState } from "react";
 import { SidebarProps } from "./Sidebar.props";
 import { MUIStyles } from "@/@types";
 import { useSearchParamActions } from "@/hooks/useSearchParamActions";
-import { useAppSelector } from "@/redux/hooks";
 import { NO_CATEGORY_FILTER_MESSAGE } from "@/constants";
+import { useGetCategoriesQuery } from "@/redux/api/api";
 
 export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
   const { updateFilterCategory, updateSearchValue } = useSearchParamActions();
@@ -40,7 +40,7 @@ export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
     NO_CATEGORY_FILTER_MESSAGE
   );
 
-  const categories = useAppSelector((state) => state.categories.categoryList);
+  const { data: categories = [] } = useGetCategoriesQuery();
   const onChangeFilterCategory = (event: SelectChangeEvent<string>) => {
     setFilterCategory(event.target.value);
   };
@@ -132,8 +132,8 @@ export const Sidebar = ({ toggleDrawer }: SidebarProps) => {
         onChange={onChangeFilterCategory}
       >
         {categories.map((category) => (
-          <MenuItem key={category} value={category}>
-            {category}
+          <MenuItem key={category.id} value={category.name}>
+            {category.name}
           </MenuItem>
         ))}
         <MenuItem key={""} value={NO_CATEGORY_FILTER_MESSAGE}>
