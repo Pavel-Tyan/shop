@@ -193,7 +193,7 @@ const Products = () => {
       </Box>
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
         <DialogContent>
-          <DialogTitle>Изменить информацию о продукте</DialogTitle>
+          <DialogTitle>Добавить новый продукт</DialogTitle>
           <TextField
             required
             margin="dense"
