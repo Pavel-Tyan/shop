@@ -1,11 +1,9 @@
 import { ProductCard } from "@components/ProductCard/ProductCard";
-import { ProductCardProps } from "@components/ProductCard/ProductCard.props";
 import { ProductListProps } from "@components/ProductList/ProductList.props";
 import Box from "@mui/material/Box/Box";
 import { MUIStyles } from "@/@types";
 import { CARDS_PER_PAGE } from "@/constants";
-
-export type Product = ProductCardProps & { id: string };
+import { Product } from "@/api/@types/api";
 
 export const ProductList = ({ currentPage, products }: ProductListProps) => {
   const currentProducts = products.slice(
