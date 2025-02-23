@@ -1,4 +1,4 @@
-import { Product } from "@/redux/slices/productSlice";
+import { Product } from "@/api/@types/api";
 
 export interface ProductListProps {
   currentPage: number;
