@@ -1,24 +1,32 @@
 import { MUIStyles } from "@/@types";
+import { Category } from "@/api/@types/api";
 import { CategoryCardButton } from "@/components/CategoryCardButton/CategoryCardButton";
 import { EMPTY_INPUT_ERROR_MESSAGE } from "@/constants";
-import { useCategoryActions } from "@/hooks/useCategoryActions";
 import { Layout } from "@/layouts/Layout";
-import { useAppSelector } from "@/redux/hooks";
-
+import {
+  useDeleteCategoryMutation,
+  useGetCategoriesQuery,
+  usePostCategoryMutation,
+  useUpdateCategoryMutation,
+} from "@/redux/api/api";
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 
 const Categories = () => {
-  const categories = useAppSelector((state) => state.categories.categoryList);
-  const { addCategory, deleteCategory, updateCategory } = useCategoryActions();
+  const { data: categories, isLoading, error } = useGetCategoriesQuery();
+  const [updateCategory] = useUpdateCategoryMutation();
+  const [deleteCategory] = useDeleteCategoryMutation();
+  const [postCategory] = usePostCategoryMutation();
 
   const wrapperStyles: MUIStyles = {
     display: "grid",
@@ -32,15 +40,15 @@ const Categories = () => {
   };
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
-  const [currentEditCategory, setCurrentEditCategory] = useState<string | null>(
-    null
-  );
+  const [currentEditCategoryId, setCurrentEditCategoryId] = useState<
+    number | null
+  >(null);
   const [editCategoryName, setEditCategoryName] = useState<string>("");
 
-  const openEditDialog = (category: string) => {
+  const openEditDialog = (category: Category) => {
     setIsEditDialogOpen(true);
-    setCurrentEditCategory(category);
-    setEditCategoryName(category);
+    setCurrentEditCategoryId(category.id);
+    setEditCategoryName(category.name);
   };
 
   const closeEditDialog = () => {
@@ -56,12 +64,15 @@ const Categories = () => {
       return;
     }
 
-    updateCategory(currentEditCategory!, editCategoryName);
+    updateCategory({
+      id: currentEditCategoryId!,
+      body: { id: currentEditCategoryId!, name: editCategoryName },
+    });
     closeEditDialog();
   };
 
   const deleteCurrentCategory = () => {
-    deleteCategory(currentEditCategory!);
+    deleteCategory(currentEditCategoryId!);
     closeEditDialog();
   };
 
@@ -86,19 +97,41 @@ const Categories = () => {
       return;
     }
 
-    addCategory(newCategoryName);
+    postCategory({ name: newCategoryName });
     closeAddDialog();
   };
+
+  const loadingSpinnerStyles: MUIStyles = {
+    margin: "20px",
+  };
+
+  const errorMessageStyles: MUIStyles = {
+    margin: "20px",
+    color: "var(--secondary-color)",
+    fontSize: "20px",
+  };
+
+  if (error) {
+    return (
+      <Typography sx={errorMessageStyles}>
+        Произошла ошибка. Попробуйте перезагрузить страницу
+      </Typography>
+    );
+  }
+
+  if (isLoading) {
+    return <CircularProgress sx={loadingSpinnerStyles} />;
+  }
 
   return (
     <Layout hasDrawer={false}>
       <Box sx={wrapperStyles}>
-        {categories.map((category) => (
+        {categories?.map((category) => (
           <CategoryCardButton
-            key={category}
+            key={category.id}
             onClick={() => openEditDialog(category)}
           >
-            {category}
+            {category.name}
           </CategoryCardButton>
         ))}
         <Dialog open={isEditDialogOpen} onClose={closeEditDialog}>
