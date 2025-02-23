@@ -1,14 +1,19 @@
 import { MUIStyles } from "@/@types";
 import { HorizontalDivider } from "@/components/HorizontalDivider/HorizontalDivider";
 import { EMPTY_INPUT_ERROR_MESSAGE } from "@/constants";
-import { useProductActions } from "@/hooks/useProductActions";
 import { Layout } from "@/layouts/Layout";
-import { useAppSelector } from "@/redux/hooks";
+import {
+  useGetCategoriesQuery,
+  useDeleteProductMutation,
+  useGetProductByIdQuery,
+  useUpdateProductMutation,
+} from "@/redux/api/api";
 import {
   Box,
   Button,
   Card,
   CardMedia,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -80,17 +85,31 @@ const ProductInfo = () => {
     gap: "20px",
   };
 
+  const loadingSpinnerStyles: MUIStyles = {
+    margin: "20px",
+  };
+
+  const errorMessageStyles: MUIStyles = {
+    margin: "20px",
+    color: "var(--secondary-color)",
+    fontSize: "20px",
+  };
+
   const { id } = useParams();
 
-  const currentProduct = useAppSelector((state) =>
-    state.products.productList.find((product) => product.id === id)
-  );
-
-  const { deleteProductById, updateProduct } = useProductActions();
+  const {
+    data: currentProduct,
+    isLoading,
+    error,
+  } = useGetProductByIdQuery(+id!);
+  const [deleteProduct] = useDeleteProductMutation();
+  const [updateProduct] = useUpdateProductMutation();
 
   const navigate = useNavigate();
   const deleteCurrentProduct = () => {
-    deleteProductById(currentProduct?.id || "");
+    if (currentProduct && currentProduct?.id) {
+      deleteProduct(currentProduct?.id);
+    }
     navigate("/");
   };
 
@@ -98,7 +117,8 @@ const ProductInfo = () => {
 
   const [name, setName] = useState<string>(currentProduct?.name || "");
 
-  const categories = useAppSelector((state) => state.categories.categoryList);
+  const { data: categories = [] } = useGetCategoriesQuery();
+
   const [category, setCategory] = useState<string>(
     currentProduct?.category || ""
   );
@@ -130,17 +150,31 @@ const ProductInfo = () => {
 
   const handleSubmit = () => {
     updateProduct({
-      id: currentProduct?.id || "",
-      img: currentProduct?.img,
-      name,
-      category,
-      description,
-      measure,
-      count,
+      id: currentProduct!.id,
+      body: {
+        img: currentProduct!.img,
+        name,
+        category,
+        description,
+        measure,
+        count,
+      },
     });
 
     setIsOpen(false);
   };
+
+  if (error) {
+    return (
+      <Typography sx={errorMessageStyles}>
+        Произошла ошибка. Попробуйте перезагрузить страницу
+      </Typography>
+    );
+  }
+
+  if (isLoading) {
+    return <CircularProgress sx={loadingSpinnerStyles} />;
+  }
 
   return (
     <Layout hasDrawer={false}>
@@ -171,8 +205,8 @@ const ProductInfo = () => {
               onChange={onChangeCategory}
             >
               {categories.map((category) => (
-                <MenuItem key={category} value={category}>
-                  {category}
+                <MenuItem key={category.id} value={category.name}>
+                  {category.name}
                 </MenuItem>
               ))}
             </Select>
