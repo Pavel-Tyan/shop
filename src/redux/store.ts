@@ -1,14 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { categoryReducer } from "@/redux/slices/categorySlice";
-import { productReducer } from "@redux/slices/productSlice";
 import { searchParamsReducer } from "./slices/searchParamSlice";
+import { categoryApi } from "./api/categoryApi";
+import { productApi } from "./api/productApi";
 
 export const store = configureStore({
   reducer: {
-    categories: categoryReducer,
-    products: productReducer,
     searchParams: searchParamsReducer,
+    [categoryApi.reducerPath]: categoryApi.reducer,
+    [productApi.reducerPath]: productApi.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware()
+      .concat(categoryApi.middleware)
+      .concat(productApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
