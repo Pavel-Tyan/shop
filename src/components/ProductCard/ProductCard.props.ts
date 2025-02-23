@@ -1,9 +1,3 @@
-export interface ProductCardProps {
-  id: string;
-  name: string;
-  description?: string;
-  category?: string;
-  count: number;
-  measure: string;
-  img?: string;
-}
+import { Product } from "@/api/@types/api";
+
+export type ProductCardProps = Product;
