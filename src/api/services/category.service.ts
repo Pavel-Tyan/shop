@@ -19,12 +19,19 @@ class CategoryService {
     return res.data;
   }
 
-  async updateCategory({ params, config }: AxiosRequestConfig<CategoryDto>) {
-    const res = await api.patch(CategoryService.URL_SEGMENT, params, config);
+  async updateCategory(
+    id: number,
+    { params, config }: AxiosRequestConfig<CategoryDto>
+  ) {
+    const res = await api.patch(
+      `${CategoryService.URL_SEGMENT}/${id}`,
+      params,
+      config
+    );
     return res.data;
   }
 
-  async deleteCategoryById(id: number) {
+  async deleteCategory(id: number) {
     const res = await api.delete(`${CategoryService.URL_SEGMENT}/${id}`);
     return res.data;
   }

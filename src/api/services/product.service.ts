@@ -21,12 +21,19 @@ class ProductService {
     return res.data;
   }
 
-  async updateProduct({ params, config }: AxiosRequestConfig<ProductDto>) {
-    const res = await api.patch(ProductService.URL_SEGMENT, params, config);
+  async updateProduct(
+    id: number,
+    { params, config }: AxiosRequestConfig<ProductDto>
+  ) {
+    const res = await api.patch(
+      `${ProductService.URL_SEGMENT}/${id}`,
+      params,
+      config
+    );
     return res.data;
   }
 
-  async deleteProductById(id: number) {
+  async deleteProduct(id: number) {
     const res = await api.delete(`${ProductService.URL_SEGMENT}/${id}`);
     return res.data;
   }
